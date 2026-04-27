@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teen Talent Network — A space for young creators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f4eee5;
+    --cream-dark: #ece4d6;
+    --ink: #1a1714;
+    --ink-soft: #2a2520;
+    --vermillion: #e94f1d;
+    --acid: #d8e94a;
+    --paper: #faf6ef;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Instrument Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 14px;
+    height: 14px;
+    background: var(--vermillion);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    top: 0;
+    left: 0;
+  }
+  .cursor.expand {
+    width: 56px;
+    height: 56px;
+    background: var(--acid);
+  }
+  
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 1000;
+    mix-blend-mode: multiply;
+  }
+  
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+    color: var(--cream);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+  .logo .dot { color: var(--vermillion); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .nav-links a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3.2rem, 13vw, 13rem);
+    line-height: 0.85;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin: 2rem 0;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hero-title .word {
+    display: block;
+    overflow: hidden;
+    line-height: 0.95;
+  }
+  .hero-title .word > span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-title .word:nth-child(1) > span { animation-delay: 0.2s; }
+  .hero-title .word:nth-child(2) > span { animation-delay: 0.4s; }
+  .hero-title .word:nth-child(3) > span { animation-delay: 0.6s; }
+  
+  @keyframes rise {
+    to { transform: translateY(0); }
+  }
+  
+  .hero-title em {
+    font-style: italic;
+    color: var(--vermillion);
+    font-weight: 300;
+  }
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: end;
+  }
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 32rem;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.1s forwards;
+  }
+  
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  
+  .scroll-cue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-align: right;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.3s forwards;
+  }
+  .scroll-cue::after {
+    content: '↓';
+    display: inline-block;
+    margin-left: 0.5rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+  
+  /* Floating sticker */
+  .sticker {
+    position: absolute;
+    top: 35%;
+    right: 6%;
+    width: 130px;
+    height: 130px;
+    background: var(--vermillion);
+    color: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    line-height: 1.4;
+    transform: rotate(-12deg);
+    animation: spin 18s linear infinite, fadeIn 1s ease 1.5s forwards;
+    opacity: 0;
+    z-index: 5;
+  }
+  .sticker::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px dashed var(--cream);
+    border-radius: 50%;
+  }
+  @keyframes spin {
+    to { transform: rotate(348deg); }
+  }
+  
+  /* Marquee */
+  .marquee {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 1.4rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .marquee-track {
+    display: inline-block;
+    animation: scroll 40s linear infinite;
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .marquee-track span {
+    margin: 0 1.5rem;
+  }
+  .marquee-track .star {
+    color: var(--vermillion);
+    font-style: normal;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  
+  /* Section labels */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+  }
+  
+  section {
+    padding: 7rem 2rem;
+    position: relative;
+  }
+  
+  /* About */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-heading {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .about-heading em {
+    font-style: italic;
+    color: var(--vermillion);
+    font-weight: 300;
+  }
+  .about-body {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    line-height: 1.55;
+    max-width: 42rem;
+    font-weight: 400;
+  }
+  .about-body strong {
+    background: var(--acid);
+    padding: 0 0.4rem;
+    font-weight: 500;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  
+  /* What we do */
+  .what {
+    border-top: 1px solid var(--ink);
+  }
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 3rem;
+  }
+  .what-card {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+    position: relative;
+    transition: background 0.5s ease, color 0.5s ease;
+    overflow: hidden;
+  }
+  .what-card:nth-child(1), .what-card:nth-child(2) { border-top: none; }
+  .what-card:nth-child(odd) { border-left: none; }
+  .what-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+  }
+  .what-card:hover::after { transform: scaleY(1); transform-origin: top; }
+  .what-card:hover { color: var(--cream); }
+  .what-card:hover .what-num { color: var(--vermillion); }
+  .what-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    transition: color 0.5s;
+    letter-spacing: 0.05em;
+  }
+  .what-title {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .what-title em { font-style: italic; font-weight: 300; }
+  .what-desc {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 28rem;
+    opacity: 0.85;
+  }
+  
+  /* Team */
+  .team {
+    background: var(--paper);
+    border-top: 1px solid var(--ink);
+  }
+  .team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .team-heading {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    font-weight: 500;
+  }
+  .team-heading em {
+    color: var(--vermillion);
+    font-style: italic;
+    font-weight: 300;
+  }
+  .team-count {
+    font-family: 'Fraunces', serif;
+    font-size: 5rem;
+    font-style: italic;
+    line-height: 1;
+    color: var(--vermillion);
+    font-weight: 300;
+  }
+  .team-count .plus { font-size: 1.5rem; }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+  .member {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+    transition: background 0.5s ease, color 0.5s ease;
+    position: relative;
+    min-height: 280px;
+    overflow: hidden;
+  }
+  .member:hover {
+    background: var(--vermillion);
+    color: var(--cream);
+  }
+  .member:hover .member-role { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .member:hover .member-name em { color: var(--cream); }
+  .member:hover .member-grade { opacity: 0.9; color: var(--cream); }
+  .member-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+    margin-bottom: 0.4rem;
+  }
+  .member-name {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    line-height: 0.95;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.02em;
+  }
+  .member-name em { font-style: italic; color: var(--vermillion); font-weight: 300; transition: color 0.5s; }
+  .member-role {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: transparent;
+    color: var(--ink);
+    padding: 0.35rem 0.6rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--ink);
+    transition: all 0.5s;
+    font-weight: 500;
+  }
+  .member-bio {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .member-grade {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: opacity 0.5s, color 0.5s;
+  }
+  
+  /* Teams breakdown */
+  .teams-section {
+    border-top: 1px solid var(--ink);
+  }
+  .teams-list {
+    margin-top: 3rem;
+  }
+  .team-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--ink);
+    transition: padding 0.4s ease;
+    position: relative;
+  }
+  .team-row:last-of-type { border-bottom: 1px solid var(--ink); }
+  .team-row:hover { padding-left: 1.5rem; }
+  .team-row:hover .team-row-name { color: var(--vermillion); }
+  
+  .team-row-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+  .team-row-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: color 0.4s;
+    font-weight: 500;
+  }
+  .team-row-name em { font-style: italic; font-weight: 300; }
+  .team-row-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .team-row-status.open {
+    color: var(--vermillion);
+    font-weight: 500;
+  }
+  .team-row-status.full {
+    opacity: 0.4;
+  }
+  
+  .team-row-members {
+    grid-column: 1 / -1;
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.4s, opacity 0.4s;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    opacity: 0;
+    padding-left: 4rem;
+  }
+  .team-row.expanded { padding-bottom: 2rem; }
+  .team-row.expanded .team-row-members {
+    max-height: 200px;
+    margin-top: 1.5rem;
+    opacity: 1;
+  }
+  .team-row-members .head {
+    color: var(--vermillion);
+    font-weight: 500;
+    font-style: normal;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    margin-right: 0.3rem;
+  }
+  .team-row-members .open-spot {
+    color: var(--vermillion);
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  /* IG nav pill */
+  .nav-links .ig-pill {
+    border: 1px solid currentColor;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+  }
+  .nav-links .ig-pill::after { display: none; }
+  .nav-links .ig-pill:hover {
+    background: var(--cream);
+    color: var(--ink);
+  }
+  
+  /* Contact section */
+  .contact {
+    background: var(--vermillion);
+    color: var(--cream);
+    border-top: 1px solid var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .contact .section-label { color: var(--cream); opacity: 0.7; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+  .contact-heading {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .contact-heading em {
+    font-style: italic;
+    color: var(--acid);
+    font-weight: 300;
+  }
+  .contact-side {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-style: italic;
+    max-width: 26rem;
+    opacity: 0.95;
+  }
+  .contact-handle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid rgba(244, 238, 229, 0.3);
+    border-bottom: 1px solid rgba(244, 238, 229, 0.3);
+    text-decoration: none;
+    color: inherit;
+    transition: padding 0.4s ease;
+    gap: 1rem;
+  }
+  .contact-handle:hover { padding-left: 1.5rem; }
+  .contact-handle:hover .contact-arrow { transform: translateX(8px); color: var(--acid); }
+  .contact-handle:hover .contact-handle-text { color: var(--acid); }
+  .contact-handle-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+  }
+  .contact-handle-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    transition: color 0.4s;
+    flex: 1;
+    text-align: center;
+  }
+  .contact-arrow {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+    transition: transform 0.4s ease, color 0.4s;
+  }
+  .contact-bottom {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.85;
+  }
+  .contact-bottom .acid { color: var(--acid); }
+  
+  /* Footer IG link */
+  .footer-meta a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(244, 238, 229, 0.3);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .footer-meta a:hover {
+    color: var(--acid);
+    border-color: var(--acid);
+  }
+  .footer {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 8rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-big {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 13vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    font-weight: 400;
+  }
+  .footer-big em {
+    font-style: italic;
+    color: var(--acid);
+    font-weight: 300;
+  }
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(244, 238, 229, 0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  /* Reveals */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* ============================================
+     MOBILE-SPECIFIC COMPONENTS
+     Hidden on desktop, activated on mobile
+     ============================================ */
+  
+  /* Hamburger button */
+  .hamburger {
+    display: none;
+    width: 32px;
+    height: 22px;
+    position: relative;
+    cursor: pointer;
+    z-index: 200;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .hamburger span {
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    left: 0;
+  }
+  .hamburger span:nth-child(1) { top: 0; }
+  .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); width: 70%; }
+  .hamburger span:nth-child(3) { bottom: 0; }
+  .hamburger.open span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  .hamburger.open span:nth-child(3) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+  
+  /* Mobile menu overlay */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    color: var(--cream);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6rem 1.5rem 2rem;
+    transform: translateY(-100%);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    visibility: hidden;
+  }
+  .mobile-menu.open {
+    transform: translateY(0);
+    visibility: visible;
+  }
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-menu-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 9vw, 3rem);
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+    border-bottom: 1px solid rgba(244, 238, 229, 0.15);
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s, transform 0.5s, color 0.3s;
+  }
+  .mobile-menu.open .mobile-menu-links a { opacity: 1; transform: translateX(0); }
+  .mobile-menu.open .mobile-menu-links a:nth-child(1) { transition-delay: 0.15s; }
+  .mobile-menu.open .mobile-menu-links a:nth-child(2) { transition-delay: 0.22s; }
+  .mobile-menu.open .mobile-menu-links a:nth-child(3) { transition-delay: 0.29s; }
+  .mobile-menu.open .mobile-menu-links a:nth-child(4) { transition-delay: 0.36s; }
+  .mobile-menu.open .mobile-menu-links a:nth-child(5) { transition-delay: 0.43s; }
+  .mobile-menu.open .mobile-menu-links a:nth-child(6) { transition-delay: 0.5s; }
+  .mobile-menu-links a em { font-style: italic; color: var(--vermillion); }
+  .mobile-menu-links a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    opacity: 0.4;
+    letter-spacing: 0.15em;
+  }
+  .mobile-menu-foot {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .mobile-menu-foot .ig { color: var(--acid); text-decoration: none; }
+  
+  /* Sticky bottom DM bar */
+  .mobile-cta {
+    display: none;
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    background: var(--vermillion);
+    color: var(--cream);
+    padding: 0.95rem 1.2rem;
+    border-radius: 100px;
+    text-decoration: none;
+    z-index: 90;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 24px rgba(233, 79, 29, 0.35);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(140%);
+    transition: opacity 0.4s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mobile-cta.show { opacity: 1; transform: translateY(0); }
+  .mobile-cta-label { display: flex; align-items: center; gap: 0.6rem; }
+  .mobile-cta-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--acid);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+  }
+  
+  .swipe-hint { display: none; }
+  
+  /* Device-detection state indicator (subtle) */
+  .device-tag {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    z-index: 80;
+    mix-blend-mode: difference;
+    color: var(--cream);
+    pointer-events: none;
+  }
+  
+  /* ============================================
+     MOBILE BREAKPOINT
+     ============================================ */
+  @media (max-width: 800px) {
+    body { cursor: auto; }
+    .cursor { display: none !important; }
+    .hamburger { display: block; }
+    nav .nav-links { display: none; }
+    .mobile-cta { display: flex; }
+    .device-tag { bottom: 5rem; }
+    
+    nav { padding: 1rem 1.2rem; }
+    
+    .hero { padding: 6rem 1.2rem 5rem; min-height: 100svh; }
+    .hero-meta { flex-direction: column; gap: 0.3rem; font-size: 0.65rem; align-items: flex-start; }
+    .hero-meta span:nth-child(2) { display: none; }
+    .hero-title { font-size: clamp(3.4rem, 19vw, 5.5rem); margin: 1.5rem 0; }
+    .hero-bottom { grid-template-columns: 1fr; gap: 1.2rem; }
+    .hero-tagline { font-size: 1.05rem; max-width: none; }
+    .scroll-cue { text-align: left; }
+    
+    .sticker {
+      position: relative;
+      top: auto; right: auto;
+      margin: 1.5rem 0 0 auto;
+      width: 110px; height: 110px;
+      font-size: 0.55rem;
+    }
+    
+    .marquee-track { font-size: 1.3rem; animation-duration: 30s; }
+    .marquee { padding: 1rem 0; }
+    
+    section { padding: 4rem 1.2rem; }
+    
+    .about, .hero-bottom { grid-template-columns: 1fr; gap: 1.5rem; }
+    .about-heading { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+    .about-body { font-size: 1.1rem; }
+    
+    .what-grid { grid-template-columns: 1fr; }
+    .what-card { 
+      border-left: none !important; 
+      border-top: 1px solid var(--ink) !important;
+      padding: 2rem 1rem;
+    }
+    .what-card:first-child { border-top: none !important; }
+    .what-title { font-size: 1.9rem; }
+    
+    /* Team: horizontal swipe carousel */
+    .team-grid {
+      grid-template-columns: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 0;
+      border: none;
+      margin: 0 -1.2rem;
+      padding: 0 1.2rem 0.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .team-grid::-webkit-scrollbar { display: none; }
+    .member {
+      flex: 0 0 84%;
+      scroll-snap-align: start;
+      min-height: 320px;
+      border: 1px solid var(--ink);
+      margin-right: 0.6rem;
+    }
+    .member:last-child { margin-right: 0; }
+    .member.tapped {
+      background: var(--vermillion);
+      color: var(--cream);
+    }
+    .member.tapped .member-role { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    .member.tapped .member-name em { color: var(--cream); }
+    .member.tapped .member-grade { color: var(--cream); opacity: 0.9; }
+    .member-name { font-size: 2.1rem; }
+    .team-count { font-size: 3.5rem; }
+    .team-heading { font-size: clamp(2.2rem, 10vw, 3rem); }
+    
+    .swipe-hint {
+      display: flex !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      opacity: 0.5;
+      margin-top: 1.5rem;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .swipe-hint .arrow {
+      animation: swipe-bounce 1.8s ease-in-out infinite;
+    }
+    @keyframes swipe-bounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(6px); }
+    }
+    
+    /* Tap-flip cards on mobile (no hover) */
+    .what-card.tapped { background: var(--ink); color: var(--cream); }
+    .what-card.tapped .what-num { color: var(--vermillion); }
+    
+    .team-row { grid-template-columns: auto 1fr; gap: 1rem; padding: 1.5rem 0; }
+    .team-row-status { grid-column: 2; text-align: right; font-size: 0.58rem; }
+    .team-row-members { padding-left: 0; font-size: 0.95rem; }
+    .team-row-name { font-size: clamp(1.5rem, 7vw, 2rem); }
+    
+    .contact { padding-bottom: 6rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .contact-heading { font-size: clamp(2.5rem, 13vw, 4rem); }
+    .contact-handle { flex-wrap: wrap; gap: 0.6rem; padding: 1.5rem 0; margin-top: 2.5rem; }
+    .contact-handle-text { text-align: left; font-size: 1.4rem; flex: 1 1 100%; }
+    .contact-arrow { font-size: 1.6rem; margin-left: auto; }
+    .contact-bottom { flex-direction: column; align-items: flex-start; font-size: 0.65rem; }
+    
+    .footer { padding: 5rem 1.2rem 6rem; }
+    .footer-big { font-size: clamp(2.8rem, 18vw, 4.5rem); }
+    .footer-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-top: 3rem; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="cursor"></div>
+  
+  <nav>
+    <div class="logo">TTN<span class="dot">.</span></div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#team">Team</a>
+      <a href="#join">Join</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener" class="ig-pill">@teen.talent.network ↗</a>
+    </div>
+    <button class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  
+  <!-- MOBILE MENU OVERLAY -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-links">
+      <a href="#about" data-close><span><em>About</em></span><span class="num">/01</span></a>
+      <a href="#work" data-close><span>Work</span><span class="num">/02</span></a>
+      <a href="#team" data-close><span><em>Team</em></span><span class="num">/03</span></a>
+      <a href="#join" data-close><span>Join</span><span class="num">/04</span></a>
+      <a href="#contact" data-close><span><em>Contact</em></span><span class="num">/05</span></a>
+      <a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener"><span>Instagram ↗</span><span class="num">/IG</span></a>
+    </div>
+    <div class="mobile-menu-foot">
+      <span>★ EST. 2025</span>
+      <a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener" class="ig">@teen.talent.network</a>
+    </div>
+  </div>
+  
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-meta">
+      <span>★ EST. 2025</span>
+      <span>VOL.01 / ISSUE 01</span>
+      <span>FOR TEENS, BY TEENS</span>
+    </div>
+    
+    <h1 class="hero-title">
+      <span class="word"><span>TEEN</span></span>
+      <span class="word"><span><em>talent</em></span></span>
+      <span class="word"><span>NETWORK</span></span>
+    </h1>
+    
+    <div class="sticker">DISCOVER<br>· · ·<br>HIDDEN<br>TALENT</div>
+    
+    <div class="hero-bottom">
+      <p class="hero-tagline">An online home for the artists, singers, dancers, writers and editors who are too busy growing up to wait around for permission.</p>
+      <div class="scroll-cue">scroll to discover</div>
+    </div>
+  </section>
+  
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>discover</span><span class="star">✦</span><span><em>connect</em></span><span class="star">✦</span><span>create</span><span class="star">✦</span><span><em>grow</em></span><span class="star">✦</span><span>collaborate</span><span class="star">✦</span><span><em>shine</em></span><span class="star">✦</span><span>discover</span><span class="star">✦</span><span><em>connect</em></span><span class="star">✦</span><span>create</span><span class="star">✦</span><span><em>grow</em></span><span class="star">✦</span><span>collaborate</span><span class="star">✦</span><span><em>shine</em></span><span class="star">✦</span>
+    </div>
+  </div>
+  
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about">
+      <div class="reveal">
+        <div class="section-label">[01] About us</div>
+        <h2 class="about-heading">A space<br>to <em>grow</em>.</h2>
+      </div>
+      <p class="about-body reveal">
+        Teen Talent Network is an online community built to support and promote young talent. We help teen creators — <strong>artists, singers, dancers, writers, editors</strong> — get recognised by featuring their work on our platform.
+        <br><br>
+        Through creator spotlights, collaborations, and community activities, we connect talented teens and give them somewhere to grow. The goal is simple: discover hidden talent, help it reach people, and build a creative community that actually has your back.
+      </p>
+    </div>
+  </section>
+  
+  <!-- WHAT WE DO -->
+  <section id="work" class="what">
+    <div class="section-label reveal">[02] What we do</div>
+    <h2 class="about-heading reveal" style="margin-bottom:1rem;">Four teams.<br><em>One mission.</em></h2>
+    <div class="what-grid">
+      <div class="what-card reveal">
+        <div class="what-num">→ 01 / Scout</div>
+        <h3 class="what-title"><em>Talent</em> Scouting</h3>
+        <p class="what-desc">We find creators through our own networks — friends, mutuals, the kid who posts insane art at 2 a.m. — and ask if they'd like in.</p>
+      </div>
+      <div class="what-card reveal">
+        <div class="what-num">→ 02 / Make</div>
+        <h3 class="what-title"><em>Content</em> & Design</h3>
+        <p class="what-desc">Posters, edits, video cuts, layouts. The visual layer that turns a creator's spotlight into something people actually stop scrolling for.</p>
+      </div>
+      <div class="what-card reveal">
+        <div class="what-num">→ 03 / Push</div>
+        <h3 class="what-title"><em>Promotions</em></h3>
+        <p class="what-desc">Posts, stories, notes, captions — the works. We make sure the work goes out the door and lands in front of the right people.</p>
+      </div>
+      <div class="what-card reveal">
+        <div class="what-num">→ 04 / Hold</div>
+        <h3 class="what-title"><em>Community</em></h3>
+        <p class="what-desc">We answer questions, sort out friction, and keep things running smoothly for every creator working with us.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- TEAM -->
+  <section id="team" class="team">
+    <div class="team-header">
+      <div class="reveal">
+        <div class="section-label">[03] The people</div>
+        <h2 class="team-heading">Meet the <em>collective</em>.</h2>
+      </div>
+      <div class="team-count reveal">12<span class="plus">+</span></div>
+    </div>
+    
+    <div class="team-grid">
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Founder</div>
+        <h3 class="member-name"><em>Aakanksha</em></h3>
+        <span class="member-role">Promotions · Head</span>
+        <p class="member-bio">Dancer, singer, baker. Started TTN because every other org needed offline meetups — and between online classes and NEET prep, that wasn't happening.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name">Swaransh</h3>
+        <span class="member-role">Community · Head</span>
+        <p class="member-bio">Gaming, gym, fascinated by code, generally doing whatever feels right. Not loud, but always in. Joined because the idea was interesting and he wanted to see where it goes.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">10th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name"><em>Zanhavi</em></h3>
+        <span class="member-role">Content · Head</span>
+        <p class="member-bio">Drawing, writing, anti-math. Quiet in public, loud around her people. Joined because she needed a change and the idea stood out.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">"Nikki"</div>
+        <h3 class="member-name">Nishita</h3>
+        <span class="member-role">Talent Scouting · Head</span>
+        <p class="member-bio">Trekking, travelling, fashion (she designs too). Always up for meeting new people and exploring new places — basically built for scouting.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">12th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name">Shresth</h3>
+        <span class="member-role">Content & Design</span>
+        <p class="member-bio">Gaming, football, gym — anything competitive. Ambivert. Joined because this felt different from the usual stuff and he wanted in on something that goes somewhere.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">12th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name"><em>Divyam</em></h3>
+        <span class="member-role">Content & Design</span>
+        <p class="member-bio">Gaming, football, calisthenics, content creation. Introvert who opens up around friends. Joined for the concept and the chance to actually help people.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name">Nishita</h3>
+        <span class="member-role">Promotions</span>
+        <p class="member-bio">Travelling, guitar, stories, poems, the occasional drawing. Down to make new friends — if the vibe matches. ツ</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">—</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name"><em>Verlin</em></h3>
+        <span class="member-role">Promotions</span>
+        <p class="member-bio">Drumming, driving, anything to do with cars. Promotions by trade, so basically always meeting new people and learning along the way.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name">Thanishka</h3>
+        <span class="member-role">Community Mgmt</span>
+        <p class="member-bio">Dancer, design student, badminton, volleyball. Extroverted, enthusiastic, building toward her own business on the side.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name"><em>Anika</em></h3>
+        <span class="member-role">Promotions</span>
+        <p class="member-bio">Poetry, singing, baking, drawing, F1, fashion. Wants to design for a living. Joined to find people who get the art-junky thing without judgment.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">11th</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name">Aarush</h3>
+        <span class="member-role">Community Mgmt</span>
+        <p class="member-bio">JEE pressure, reading, coding, gaming — and a national-level badminton player. Semi-introvert, dark humour, opens up around friends.</p>
+      </div>
+      
+      <div class="member reveal">
+        <div class="member-grade">—</div>
+        <div class="member-tag">Member</div>
+        <h3 class="member-name"><em>Aditi</em></h3>
+        <span class="member-role">Community Mgmt</span>
+        <p class="member-bio">Bio incoming. Welcome aboard.</p>
+      </div>
+    </div>
+    <div class="swipe-hint">← swipe <span class="arrow">→</span></div>
+  </section>
+  
+  <!-- TEAMS BREAKDOWN -->
+  <section id="join" class="teams-section">
+    <div class="section-label reveal">[04] Teams & openings</div>
+    <h2 class="about-heading reveal" style="margin-bottom:1rem;">We're <em>hiring</em>.<br>Sort of.</h2>
+    <p class="reveal" style="opacity:0.7; max-width:36rem; margin-bottom:2rem; font-size:1.05rem; line-height:1.5;">Tap a team to see who's on it. Open spots are real spots — if you've been lurking, this is your sign.</p>
+    
+    <div class="teams-list">
+      <div class="team-row reveal">
+        <div class="team-row-num">/01</div>
+        <h3 class="team-row-name"><em>Talent</em> Scouting</h3>
+        <div class="team-row-status open">2 spots open →</div>
+        <div class="team-row-members"><span class="head">Head</span> Nikki <span class="open-spot">+ 2 open</span></div>
+      </div>
+      <div class="team-row reveal">
+        <div class="team-row-num">/02</div>
+        <h3 class="team-row-name"><em>Content</em> & Design</h3>
+        <div class="team-row-status open">1 spot open →</div>
+        <div class="team-row-members"><span class="head">Head</span> Zanhavi · Divyam · Shresth <span class="open-spot">+ 1 open</span></div>
+      </div>
+      <div class="team-row reveal">
+        <div class="team-row-num">/03</div>
+        <h3 class="team-row-name"><em>Promotions</em></h3>
+        <div class="team-row-status open">2 spots open →</div>
+        <div class="team-row-members"><span class="head">Head</span> Aakanksha · Nishita · Anika · Verlin <span class="open-spot">+ 2 open</span></div>
+      </div>
+      <div class="team-row reveal">
+        <div class="team-row-num">/04</div>
+        <h3 class="team-row-name"><em>Community</em> Mgmt</h3>
+        <div class="team-row-status full">— full house —</div>
+        <div class="team-row-members"><span class="head">Head</span> Swaransh · Aditi · Thanishka · Aarush</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="section-label reveal">[05] Get in touch</div>
+    <div class="contact-grid">
+      <h2 class="contact-heading reveal">Slide<br>into our<br><em>DMs.</em></h2>
+      <p class="contact-side reveal">Wanna get featured? Have a question? Bored and want to vibe? Our Instagram is the front door — knock loudly. We answer.</p>
+    </div>
+    
+    <a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener" class="contact-handle reveal">
+      <span class="contact-handle-label">→ Instagram</span>
+      <span class="contact-handle-text"><em>@teen.talent.network</em></span>
+      <span class="contact-arrow">↗</span>
+    </a>
+    
+    <div class="contact-bottom reveal">
+      <span>★ DMs are open</span>
+      <span class="acid">Pitch us · Tag us · Send us your work</span>
+      <span>Response time: usually quick</span>
+    </div>
+  </section>
+  
+  <!-- FOOTER -->
+  <footer class="footer">
+    <h2 class="footer-big reveal">
+      Got<br><em>talent?</em><br>Slide in.
+    </h2>
+    <div class="footer-meta">
+      <span>© Teen Talent Network 2025</span>
+      <span><a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener">@teen.talent.network ↗</a></span>
+      <span>★ Made with too much chai</span>
+    </div>
+  </footer>
+  
+  <!-- STICKY MOBILE DM CTA -->
+  <a href="https://www.instagram.com/teen.talent.network/" target="_blank" rel="noopener" class="mobile-cta" id="mobileCta">
+    <span class="mobile-cta-label">DM us on Instagram</span>
+    <span>↗</span>
+  </a>
+  
+  <!-- DEVICE INDICATOR -->
+  <div class="device-tag" id="deviceTag">— device: detecting</div>
+  
+  <script>
+    // ============================================
+    // DEVICE DETECTION
+    // ============================================
+    function detectDevice() {
+      const ua = navigator.userAgent;
+      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      const isTouch = window.matchMedia('(pointer: coarse)').matches;
+      const isNarrow = window.innerWidth < 800;
+      const isMobile = isMobileUA || (isTouch && isNarrow) || isNarrow;
+      
+      document.body.dataset.device = isMobile ? 'mobile' : 'desktop';
+      const tag = document.getElementById('deviceTag');
+      if (tag) tag.textContent = `— device: ${isMobile ? 'mobile' : 'desktop'} ●`;
+      return isMobile;
+    }
+    
+    let isMobile = detectDevice();
+    
+    // Re-detect on resize/orientation
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { isMobile = detectDevice(); }, 150);
+    });
+    
+    // ============================================
+    // DESKTOP-ONLY: Custom cursor + parallax
+    // ============================================
+    if (!isMobile) {
+      const cursor = document.querySelector('.cursor');
+      let mouseX = 0, mouseY = 0;
+      let curX = 0, curY = 0;
+      
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      
+      function animateCursor() {
+        curX += (mouseX - curX) * 0.18;
+        curY += (mouseY - curY) * 0.18;
+        cursor.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+      
+      document.querySelectorAll('a, .member, .what-card, .team-row, .nav-links, .sticker').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+      });
+      
+      // Parallax on hero
+      const heroTitle = document.querySelector('.hero-title');
+      const sticker = document.querySelector('.sticker');
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5);
+        const y = (e.clientY / window.innerHeight - 0.5);
+        heroTitle.style.transform = `translate(${x * 14}px, ${y * 7}px)`;
+        if (sticker) {
+          sticker.style.marginLeft = `${x * -25}px`;
+          sticker.style.marginTop = `${y * -25}px`;
+        }
+      });
+    } else {
+      // Hide cursor element on mobile
+      const cursor = document.querySelector('.cursor');
+      if (cursor) cursor.remove();
+    }
+    
+    // ============================================
+    // MOBILE-ONLY: Hamburger menu + sticky CTA
+    // ============================================
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (link.hasAttribute('data-close') || link.getAttribute('href').startsWith('#')) {
+          hamburger.classList.remove('open');
+          mobileMenu.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+    
+    // Sticky DM CTA — show after scrolling past hero
+    const mobileCta = document.getElementById('mobileCta');
+    const heroSection = document.querySelector('.hero');
+    
+    window.addEventListener('scroll', () => {
+      if (!isMobile || !heroSection || !mobileCta) return;
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight - 100;
+      const footerTop = document.querySelector('.footer').offsetTop;
+      const scrolled = window.scrollY + window.innerHeight;
+      
+      if (window.scrollY > heroBottom && scrolled < footerTop + 100) {
+        mobileCta.classList.add('show');
+      } else {
+        mobileCta.classList.remove('show');
+      }
+    }, { passive: true });
+    
+    // ============================================
+    // MOBILE: Tap-to-flip cards (hover doesn't exist on touch)
+    // ============================================
+    if (isMobile) {
+      document.querySelectorAll('.what-card, .member').forEach(card => {
+        card.addEventListener('click', () => {
+          // Close other tapped cards in same group
+          const siblings = card.parentElement.querySelectorAll('.tapped');
+          siblings.forEach(s => { if (s !== card) s.classList.remove('tapped'); });
+          card.classList.toggle('tapped');
+        });
+      });
+    }
+    
+    // ============================================
+    // SHARED: Scroll reveals + team row expand
+    // ============================================
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('in'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    document.querySelectorAll('.team-row').forEach(row => {
+      row.addEventListener('click', () => row.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>
